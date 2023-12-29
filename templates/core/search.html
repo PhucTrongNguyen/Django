@@ -1,0 +1,73 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+<main>
+    <div class="container d-flex justify-content-center">
+        <div class="d-flex">
+            <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Nhà cung cấp</h5>
+                  <div class="row">
+                    {% for v in vender %}
+                    <div class="col-3">
+                      <input style="" id="exampleCheckbox1" class="filter-checkbox" data-filter="vender" type="checkbox" value="{{v.maNCC}}" name="dolce_gabbana" />
+                      <label for="dolce_gabbana">{{ v.tenNCC }}</label>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-3">
+        <span>Chúng tôi tìm thấy {{number_product.count}} sản phẩm cho bạn </span>
+        <div class="row mt-3">
+            {% for p in products %}
+              <div class="col-3 d-flex justify-content-center">
+                <div class="card" style="width: 18rem;">
+                  <div class="percent rounded" style="width: 50px; height: 25px; background: red; position: absolute">
+                    <span class="text-light">-{{ p.get_precentage|floatformat }}%</span>
+                  </div>
+                  <img src="{{ p.anhSP.url }}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <span style="font-size: 12px">{{ p.loaiSP.tenLoai }}</span>
+                    <h5 class="card-title">{{ p.tenSP }}</h5>
+                    <div class="d-flex justify-content-between">
+                      <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.maSP }}" />
+                    <input type="hidden" value="{{ p.maSP }}" class="product-pid-{{ p.maSP }}" />
+                    <input type="hidden" value="{{ p.anhSP.url }}" class="product-image-{{ p.maSP }}" />
+                    <input type="hidden" value="{{ p.maSP }}" class="product-id-{{p.maSP}}" />
+                    <input type="hidden" value="{{ p.tenSP }}" class="product-title-{{p.maSP}}" />
+                    <div class="d-flex">
+                      <span class="current-product-price-{{p.maSP}}">{{ p.giaBan }}</span><span>VND</span>
+                      <span style="font-size: 12px; opacity: 50%" ><del>{{ p.giaCu }}VND</del></span>
+                    </div>
+                    <a href="{% url "core:product-detail" p.maSP %}" class="btn btn-primary">
+                      <i class="fa-solid fa-plus"></i>
+                    </a>
+                    <input type="text" value="{{ p.maSP }}" hidden class="product-id" />
+                    <button type="submit" class="btn btn-primary add-to-cart-btn" id="add-to-cart-btn" data-index="{{ p.maSP }}">
+                      <i class="fa-solid fa-cart-shopping text-light "></i>
+                    </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+        </div>
+        <div class="d-flex justify-content-center">
+          {% if products.has_next %}
+          <a href="?page=1">&laquo First</a>
+          <a href="?page={{products.next_page_number}}" style="margin-left: 10px; margin-right: 10px">next</a>
+          {% endif %}
+  
+          Page {{products.number}} of {{products.paginator.num_pages}}
+  
+          {% if products.has_previous %}
+          <a href="?page={{products.paginator.num_pages}}" style="margin-left: 10px; margin-right: 10px">last</a>
+          <a href="?page={{products.previous_page_number}}">Previous &raquo</a>
+          {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock content %}

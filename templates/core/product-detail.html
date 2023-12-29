@@ -1,0 +1,260 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-6 d-flex justify-content-center">
+                        <div class="border w-50">
+                            <img src="{{product.anhSP.url}}" style="width: 100%; height: auto;" alt="">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card border-0">
+                            <div class="card-body">
+                                <h1 class="card-title">{{product.tenSP}}</h1>
+                                <div class="d-flex">
+                                    <h3 class="card-text d-flex align-items-center current-product-price-{{product.maSP}}" id="current-product-price">{{ product.giaBan|intcomma }}</h3><span>VND</span>
+                                    <div class="d-inline-grid" style="font-size: 12px; margin-left: 10px">
+                                        <span>{{ product.get_precentage|floatformat }}%</span>
+                                        <span id="old-price"><del>{{ product.giaCu|intcomma }}VND</del></span>
+                                    </div>
+                                    {% comment %} <span class="d-inline-grid" style="font-size: 12px; margin-left: 10px"><span>{{ product.get_precentage|floatformat }}%</span class="old-price"><del>{{ product.giaCu }}VND</del></span> {% endcomment %}
+                                </div>
+                                {% comment %} <h3 class="card-text d-flex align-items-center" id="current-product-price">{{ product.giaBan }}VND<span class="d-inline-grid" style="font-size: 12px; margin-left: 10px"><span>{{ product.get_precentage|floatformat }}%</span class="old-price"><del>{{ product.giaCu }}VND</del></span></h3> {% endcomment %}
+                                {% comment %} <p class="card-text">{{ product.moTa }}</p> {% endcomment %}
+                                <form class="d-flex justify-content-between" action="#" method="POST">
+                                    {% csrf_token %}
+                                    <input type="number" min="1" value="1" class="form-control w-25 product-quantity-{{ product.maSP }}" id="product-quantity">
+                                    <div class="d-flex">
+                                        {% comment %} <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.maSP }}" /> {% endcomment %}
+                                        <input type="hidden" value="{{ product.maSP }}" class="product-pid-{{ product.maSP }}" />
+                                        <input type="hidden" value="{{ product.anhSP.url }}" class="product-image-{{ product.maSP }}" />
+                                        <input type="hidden" value="{{ product.maSP }}" class="product-id-{{product.maSP}}" />
+                                        <input type="hidden" value="{{ product.tenSP }}" class="product-title-{{product.maSP}}" />
+                                        <button type="submit" class="btn btn-primary add-to-cart-btn" id="add-to-cart-btn" data-index="{{ product.maSP }}">
+                                            <i class="fa-solid fa-cart-shopping text-light "></i>
+                                        </button>
+                                        <button class="btn border add-to-wishlist" data-product-item="{{ product.maSP }}"><i class="fa-regular fa-heart"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <span>Loại: {{ product.loaiSP.tenLoai }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="card p-4">
+                    <div class="tab d-flex justify-content-around">
+                        <button class="tablinks" onclick="openCity(event, 'MoTa')">Mô tả</button>
+                        <button class="tablinks" onclick="openCity(event, 'ThemTT')">Thêm thông tin</button>
+                        <button class="tablinks" onclick="openCity(event, 'NhaCC')">Nhà cung cấp</button>
+                        <button class="tablinks" onclick="openCity(event, 'DanhGia')">Đánh giá<span class="badge text-black">{{ reviews.count }}</span></button>
+                    </div>
+                    
+                    <!-- Tab content -->
+                    <div id="MoTa" class="tabcontent">
+                        <div class="card-text">
+                            <p>{{ product.moTa }}</p>
+                        </div>
+                    </div>
+                    
+                    <div id="ThemTT" class="tabcontent">
+                        <div class="card-text">
+                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Mollitia blanditiis quo impedit dolorum veritatis qui nesciunt sunt facilis consequuntur, vitae ullam inventore aut explicabo officiis nostrum rerum velit porro, quia praesentium harum repellat. Commodi tempora necessitatibus aliquam ullam adipisci ipsum quasi sequi enim veniam inventore labore alias beatae, eveniet quo nulla iusto quisquam aspernatur dolores possimus iste, facere suscipit consequuntur nemo. Ex nemo accusamus alias itaque omnis sunt ipsum! Eaque optio ad voluptatum asperiores, animi ex quaerat velit, quisquam dolorem odio delectus error? Blanditiis molestiae temporibus, labore officiis dolorem quae obcaecati quasi sapiente ea ullam autem fuga quia facilis tempore!</p>
+                        </div>
+                    </div>
+                    
+                    <div id="NhaCC" class="tabcontent">
+                        <div class="card-text">
+                            <p>{{product.nhaCungCap.moTa}}</p>
+                        </div>
+                    </div>
+
+                    <div id="DanhGia" class="tabcontent">
+                        <h4 class="card-title">Câu hỏi và phản hồi của khách hàng</h4>
+                        <div class="card-body">
+                            <div class="comment-list">
+                                {% for v in reviews %}
+                                <div class="border row">
+                                    <div class="col-2 d-flex align-items-center">
+                                        <p>{{v.user.username|title}}</p>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="d-flex justify-content-between">
+                                            <span>{{ v.ngayDG|date:"d M, Y" }}</span>
+                                            <span class="d-flex align-items-center">
+                                                {% if v.get_rating == 5 %}
+                                                <div class="d-flex">
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                </div>
+                                                {% elif v.get_rating == 4 %}
+                                                <div class="d-flex">
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                </div>
+                                                {% elif v.get_rating == 3 %}
+                                                <div class="d-flex">
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                </div>
+                                                {% elif v.get_rating == 2 %}
+                                                <div class="d-flex">
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                </div>
+                                                {% else %}
+                                                <div class="d-flex">
+                                                    <i class="fa-solid fa-star"></i>
+                                                </div>
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        
+                                        <p>{{ v.danhGia }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% if request.user.is_authenticated %}
+                                {% if make_review == True %}
+                                
+                                <div class="mt-3">
+                                    <span class="text-success" id="review-res"></span>
+                                    <h4 class="add-review">Thêm đánh giá</h4>
+                                    <form class="hide-comment comment-form" id="comment-form" action="{% url "core:ajax-add-review" product.maSP %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    {{review_form.review}}
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    {{review_form.xepHang}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Gửi đánh giá</button>
+                                    </form>
+                                </div>
+
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <h4>Các sản phẩm liên quan</h4>
+                    <div class="row">
+                        {% for p in products %}
+                        <div class="col-3">
+                            <div class="card" >
+                                <div class="percent rounded" style="width: 50px; height: 25px; background: red; position: absolute">
+                                    <span class="text-light">-{{ p.get_precentage|floatformat }}%</span>
+                                </div>
+                                <img src="{{ p.anhSP.url }}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.maSP }}" />
+                                    <input type="hidden" value="{{ p.maSP }}" class="product-pid-{{ p.maSP }}" />
+                                    <input type="hidden" value="{{ p.anhSP.url }}" class="product-image-{{ p.maSP }}" />
+                                    <input type="hidden" value="{{ p.maSP }}" class="product-id-{{p.maSP}}" />
+                                    <input type="hidden" value="{{ p.tenSP }}" class="product-title-{{p.maSP}}" />
+                                    <span style="font-size: 12px">{{ p.loaiSP.tenLoai }}</span>
+                                    <h5 class="card-title">{{ p.tenSP }}</h5>
+                                    <div class="">
+                                        <div class="d-flex">
+                                            <span class="current-product-price-{{p.maSP}}">{{ p.giaBan|intcomma }}</span><span>VND</span>
+                                            <span style="font-size: 12px; opacity: 50%" ><del>{{ p.giaCu|intcomma }}VND</del></span>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <a href="{% url "core:product-detail" p.maSP %}" class="btn btn-primary">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </a>
+                                            <button type="submit" class="btn btn-primary add-to-cart-btn" id="add-to-cart-btn" data-index="{{ p.maSP }}">
+                                                <i class="fa-solid fa-cart-shopping text-light "></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="d-flex justify-content-center mt-3">
+                            {% if products.has_next %}
+                            <a href="?page=1">&laquo First</a>
+                            <a href="?page={{products.next_page_number}}" style="margin-left: 10px; margin-right: 10px">next</a>
+                            {% endif %}
+                    
+                            Page {{products.number}} of {{products.paginator.num_pages}}
+                    
+                            {% if products.has_previous %}
+                            <a href="?page={{products.paginator.num_pages}}" style="margin-left: 10px; margin-right: 10px">last</a>
+                            <a href="?page={{products.previous_page_number}}">Previous &raquo</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Vận chuyển</h4>
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-location-dot"></i><input style="outline: none; " class="card-text form-control border-0" readonly placeholder="{{address.diaChi}}" />
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            {% if address.trangThai == True %}
+                            <span class="text-success">Địa chỉ hợp lệ</span>
+                            {% else %}
+                            <span class="text-warning">Địa chỉ không hợp lệ</span>
+                            {% endif %}
+                            
+                            <a href="#" style="text-decoration: none;">Thay đổi</a>
+                        </div>
+                        
+                        <hr>
+                        <h4 class="card-title">Giao hàng và bảo hành</h4>
+                        <div class="mt-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-rotate-left"></i><span style="margin-left: 10px;">{{product.nhaCungCap.tGVanChuyen}} ngày</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-calendar-days"></i><span style="margin-left: 10px;">{{product.nhaCungCap.thoiHanBaoHanh}} tháng</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h4 class="card-title">Nhà cung cấp</h4>
+                        <p>{{product.nhaCungCap.tenNCC}}</p>
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-location-dot"></i><span style="margin-left: 10px;">{{product.nhaCungCap.diaChi}}</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-phone"></i><span style="margin-left: 10px;">{{product.nhaCungCap.lienHe}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}

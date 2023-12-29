@@ -1,0 +1,60 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+<main class="container mt-5">
+    <div class="w-100 d-flex">
+        <div class="tab w-25">
+            <a class="btn form-control mt-3" href="{% url "core:dashboard" %}">Quay lại</a>
+            <button class="tablinks form-control mt-3" onclick="openCity(event, 'HoaDon')">Hóa đơn</button>
+            <a class="btn form-control mt-3" href="{% url "userauths:sign-out" %}">Đăng xuất</a>
+        </div>
+        <div class="w-75 ml-5">
+            <div id="BangDK" class="tabcontent">
+                <div class="card-text">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet nisi nesciunt explicabo inventore voluptate? Sit maxime asperiores esse atque aliquid minima consequuntur vero a eveniet impedit quis, reiciendis aut nulla!</p>
+                </div>
+            </div>
+            <div id="HoaDon" class="tabcontent">
+                <div class="card-text">
+                    <h2>Hóa đơn của bạn</h2>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Hóa đơn</th>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Gía bán</th>
+                            <th>Số lượng</th>
+                            <th>Tổng cộng</th>
+                        </tr>
+                        {% for o in products %}
+                        <tr>
+                            <td>#{{o.id}}</td>
+                            <td style="width: 250px"><img src="{{o.anhSP}}" class="w-50" /></td>
+                            <td>{{o.sanPham}}</td>
+                            <td>{{o.giaBan}} <span>VND</span></td>
+                            <td>{{o.soLuong}}</td>
+                            <td>{{o.thanhTien}} <span>VND</span></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <div id="KTHoaDon" class="tabcontent">
+                <div class="card-text">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet nisi nesciunt explicabo inventore voluptate? Sit maxime asperiores esse atque aliquid minima consequuntur vero a eveniet impedit quis, reiciendis aut nulla!</p>
+                </div>
+            </div>
+            <div id="DiaChi" class="tabcontent">
+                <div class="card-text">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet nisi nesciunt explicabo inventore voluptate? Sit maxime asperiores esse atque aliquid minima consequuntur vero a eveniet impedit quis, reiciendis aut nulla!</p>
+                </div>
+            </div>
+            <div id="TaiKhoan" class="tabcontent">
+                <div class="card-text">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet nisi nesciunt explicabo inventore voluptate? Sit maxime asperiores esse atque aliquid minima consequuntur vero a eveniet impedit quis, reiciendis aut nulla!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+<main class="container bg-light p-5">
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>{{form.errors}}</strong>
+        </div>
+    {% endif %}
+    <div class="">
+        <h1 class="mb-5">Đăng ký</h1>
+        <p class="mb-50">Đã có tài khoản? <a href="{% url "userauths:sign-in" %}">Đăng nhập</a></p>
+    </div>
+    <form method="POST" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="form-label">Username</label>
+            {{form.username}}
+        </div>
+        <div class="form-group">
+            <label class="form-label">Email</label>
+            {{form.email}}
+        </div>
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            {{form.password1}}
+        </div>
+        <div class="form-group">
+            <label class="form-label">Confirm Password</label>
+            {{form.password2}}
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success mt-1">Đăng ký</button>
+        </div>
+        
+    </form>
+</main>
+{% endblock content %}

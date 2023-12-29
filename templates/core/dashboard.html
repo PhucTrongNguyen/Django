@@ -1,0 +1,131 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+<main class="container mt-5">
+    <div class="w-100 d-flex">
+        <div class="tab w-25">
+            <button class="tablinks form-control mt-3" onclick="openCity(event, 'BangDK')">Bảng điều khiển</button>
+            <button class="tablinks form-control mt-3" onclick="openCity(event, 'HoaDon')">Hóa đơn</button>
+            <button class="tablinks form-control mt-3" onclick="openCity(event, 'KTHoaDon')">Kiểm tra hóa đơn</button>
+            <button class="tablinks form-control mt-3" onclick="openCity(event, 'DiaChi')">Địa chỉ</button>
+        </div>
+        <div class="w-75 ml-5">
+            <div id="BangDK" class="tabcontent">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Xin chao {{request.user|title}}</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            Từ trang điều khiển, bạn sẽ dễ dàng kiểm tra quá trình đặt hàng, quản lý địa chỉ đặt hàng và giao hàng.
+                        </p>
+                        {% comment %} <div class="mt-4">
+                            <p>{{month}}</p>
+                            <p>{{total_orders}}</p>
+                        </div> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+            <div id="HoaDon" class="tabcontent">
+                <div class="card-text">
+                    <h2>Hóa đơn của bạn</h2>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Hóa đơn</th>
+                            <th>Ngày đặt</th>
+                            <th>Trạng thái đặt hàng</th>
+                            <th>Trạng thái thanh toán</th>
+                            <th>Tổng cộng</th>
+                            <th>Hành động</th>
+                        </tr>
+                        {% for o in orders %}
+                        <tr>
+                            <td>#{{o.id}}</td>
+                            <td>{{o.ngayDH}}</td>
+                            <td>{{o.trangThaiDH|title}}</td>
+                            {% if o.trangThaiThanhToan == True %}
+                                <td><i class="fa-solid fa-check text-success d-flex justify-content-center"></i></td>
+                            {% else %}
+                                <td><i class="fa-solid fa-xmark text-danger d-flex justify-content-center"></i></td>
+                            {% endif %}
+                            <td>{{o.giaBan}} <span>VND</span></td>
+                            <td><a href="{% url 'core:order-detail' o.id %}" class="btn-link">View</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <div id="KTHoaDon" class="tabcontent">
+                <div class="">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <div id="DiaChi" class="tabcontent">
+                <form class="mb-4 card" method="POST">
+                    {% csrf_token %}
+                    <div class="card-header">
+                        <h5>Them dia chi</h5>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <input placeholder="Dia chi" class="form-control" name="address" type="text" />
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-success" name="submit" type="submit">Luu dia chi</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    {% for a in address %}
+                    <div class="card col-6">
+                        <div class="card-header">
+                            <h3>Dia chi giao hang {{forloop.counter}}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="">
+                                <p>{{a.diaChi}}</p>
+                            </div>
+                        </div>
+                        {% if a.trangThai %}
+                        <div class="d-flex">
+                            <button style="display: none" data-address="{{a.id}}" class="btn btn-success make-default-address">Lam mac dinh</button>
+                            
+                        </div>
+                        {% else %}
+                        <div class="d-flex">
+                            <button data-address="{{a.id}}" class="btn btn-success make-default-address">Lam mac dinh</button>
+                            
+                        </div>
+                        {% endif %}
+                        
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{month|safe}},
+        datasets: [{
+          label: 'Số lượng đặt hàng',
+          data: {{total_orders|safe}},
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+</script>
+  
+{% endblock content %}

@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css">
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="{% static 'assets/js/function.js' %}"></script>
+  <script src="{% static 'assets/js/scripts.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="w-100 " style="position: fixed; left: 0px; right: 0px; top: 0px; z-index: 99;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Glasses Shop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url "core:index" %}">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "core:product-list" %}">Sản phẩm</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Danh mục
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% for c in category_product_list %}
+                  <li><a class="dropdown-item" href="{% url "core:category_product_list" c.maLoai %}">{{c.tenLoai}}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "core:vender-list" %}">Nhà cung cấp</a>
+            </li>
+          </ul>
+          <form class="navbar-form navbar-left d-inline-flex" action="{% url 'core:search' %}" method="GET">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search" name="SP">
+            </div>
+            <button class="btn btn-default" type="submit">
+              <i class="fa-solid fa-magnifying-glass text-black"></i>
+            </button>
+          </form>
+          <div class="d-flex justify-content-between align-items-center" style="">
+            {% if request.user.is_authenticated %}
+              <a href="{% url 'userauths:sign-out' %}" style="margin-left: 10px; text-decoration: none">
+                <span class="text-black">Sign out</span>
+              </a>
+            {% else %}
+              <a href="{% url 'userauths:sign-in' %}" style="margin-left: 10px; text-decoration: none">
+                <span class="text-black">Sign in</span>
+              </a>
+            {% endif %}
+            <a href="{% url "core:dashboard" %}" style="margin-left: 10px;">
+              <i class="fa-solid fa-user text-black"></i>
+            </a>
+            <a href="{% url "core:wishlist" %}" style="margin-left: 10px; text-decoration: none">
+              <i class="fa-regular fa-heart text-black d-flex align-items-center"><span class="badge text-black wishlist-items-count" style="font-size: 10px">{{ wishlist.count }}</span></i>
+            </a>
+            <a href="{% url "core:cart" %}" style="margin-left: 10px; text-decoration: none">
+              <i class="fa-solid fa-cart-shopping text-black d-flex align-items-center"><span class="badge text-black cart-items-count" style="font-size: 10px">{{ request.session.cart_data_obj|length }}</span></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="d-flex w-100">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{message.tags}}">
+            <strong>{{ message }}</strong>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <script>
+        setTimeout (() => {
+          $(".alert").alert("close")
+        }, 3000)
+      </script>
+    </div>
+  </div>
+
+    <div class="" style="margin-top: 60px">
+      {% block content %}
+    
+      {% endblock content %}
+    </div>
+    <!-- CONTACT US -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/93c0950cc1.js" crossorigin="anonymous"></script>
+    
+
+    
+  </body>
+</html>

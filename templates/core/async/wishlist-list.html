@@ -1,0 +1,30 @@
+<main class="container mt-5">
+    <div class="">
+        <h1 class="text-center">Danh sách yêu thích</h1>
+        <table class="table table-bordered">
+            <tr>
+                <th>Hình ảnh</th>
+                <th>Tên sp</th>
+                <th>Gía bán</th>
+                <th>Tình trạng</th>
+                <th>Chức năng</th>
+                <th>Xóa</th>
+            </tr>
+            {% for p in wishlist %}
+            <tr>
+                <td style="width: 250px"><img src="{{p.sanPham.anhSP.url}}" alt="" class="w-25"></td>
+                <td>{{p.sanPham.tenSP}}</td>
+                <td>{{p.sanPham.giaBan}}</td>
+                <td>{{p.sanPham.trangThaiSP}}</td>
+                <td>
+                    <button class="btn btn-success">Thêm vào giỏ hàng</button>
+                </td>
+                <td>
+                    <button class="btn btn-success delete-wishlist-product" data-wishlist-product= {{ p.id }}><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>
+            {% endfor %}
+            
+        </table>
+    </div>
+</main>

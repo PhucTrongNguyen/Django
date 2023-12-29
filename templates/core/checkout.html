@@ -1,0 +1,77 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+<main class="container">
+    <h3>Thanh toán</h3>
+    <span>Ở đây có {{ totalcartitems }} sản phẩm trong giỏ hàng của bạn</span>
+    <div class="row mt-3">
+        <div class="col-6">
+            <h4>Chi tiết hóa đơn</h4>
+            <form action="#" method="POST">
+                <div class="row">
+                    <div class="col-6 mt-3">
+                        <input type="text" class="form-control" placeholder="Họ" name="" value="">
+                    </div>
+                    <div class="col-6 mt-3">
+                        <input type="text" class="form-control" placeholder="Tên" name="" value="">
+                    </div>
+                    <div class="col-6 mt-3">
+                        <input type="text" class="form-control" placeholder="Địa chỉ" name="" value="">
+                    </div>
+                    <div class="col-6 mt-3">
+                        <input type="text" class="form-control" placeholder="Email" name="" value="">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-6">
+            <div class="card p-3">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title">Hóa đơn</h4>
+                    <span>Tổng cộng: {{cart_total_amount|floatformat:0}} VND</span>
+                </div>
+                <hr>
+                <a class="btn btn-success w-25" href="{% url "core:cart" %}" >Quay lại giỏ hàng</a>
+                <table class="mt-2">
+                    {% for product_id, item in cart_data.items %}
+                        <tr>
+                            {% comment %} <td><input style="margin-left: 50%; transform: translateX(-50%);" type="checkbox" name="" id=""></td> {% endcomment %}
+                            <td style="width: 180px">{{item.tenSP}}</td>
+                            <td><img src="{{item.anhSP}}" style="width: 50px" /></td>
+                            <td>x{{item.soLuong}}</td>
+                            <td style="opacity: 50%">{{item.giaBan}} <span>VND</span></td>
+                            <td>{% widthratio item.giaBan 1 item.soLuong %} <span>VND</span></td>
+                            {% comment %} <td><buton data-product="{{product_id}}" style="margin-left: 50%; transform: translateX(-50%);" class = "btn btn-default delete-product"><i class="fa-solid fa-trash"></i></button></td>
+                            <td><buton data-product="{{product_id}}" style="margin-left: 50%; transform: translateX(-50%);" class = "btn btn-default update-product"><i class="fa-solid fa-rotate-right"></i></button></td>    
+                          {% endcomment %}
+                        </tr>
+                    {% endfor %}
+                </table>
+                {% comment %} <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td>Hình ảnh</td>
+                            <td>Tên sản phẩm</td>
+                            <td>Số lượng</td>
+                            <td>Gía bán</td>
+                        </tr>
+                    </table>
+                </div> {% endcomment %}
+            </div>
+            <div class="">
+                <h4><strong>Thanh toán</strong></h4>
+                <div>
+                    <input type="radio" id="exampleRadio1" name="payment_option" value="">
+                    <label for="exampleRadio1">Ví điện tử</label><br>
+                    <input type="radio" id="css" name="fav_language" value="HTML">
+                    <label for="css">Thanh toán trực tiếp</label><br>
+                </div>
+                <div>
+                    {{paypal_payment_button.render}}
+                </div>
+                <button class="btn btn-success mt-3">Tạo hóa đơn</button>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}

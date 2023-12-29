@@ -1,0 +1,186 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+    <div class="container-fluid position-relative" style="top: 20px">
+          <div id="carouselExampleControls" class="carousel slide container" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="{% static 'assets/images/slide01.jpg' %}" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="{% static 'assets/images/slide02.jpg' %}" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="{% static "assets/images/slide03.jpg" %}" class="d-block w-100" alt="...">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+          <div class="container mt-5">
+            <div class="row" style="height: 200px;">
+                <div class="col-3">
+                    <div class="card-header">
+                        <h4>Sự Đa Dạng Về Mẫu Mã và Phong Cách</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="opacity-50">Glasses Shop mang đến cho bạn một thế giới mắt kính đa dạng với hàng trăm mẫu mã và phong cách khác nhau. Từ những mẫu cổ điển và thanh lịch đến những xu hướng thời thượng và hiện đại, chúng tôi cam kết cung cấp sự lựa chọn phù hợp với mọi phong cách và sở thích.</p>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card-header">
+                        <h4>Chất Lượng Và Độ Tin Cậy</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="opacity-50">Chúng tôi tập trung vào việc cung cấp những sản phẩm chất lượng cao từ những thương hiệu uy tín và các loại vật liệu an toàn cho mắt. Tất cả các sản phẩm trên [Tên Website] đều được chọn lựa kỹ càng và kiểm tra chất lượng một cách cẩn thận, đảm bảo sự an toàn và tin cậy cho người dùng.</p>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card-header">
+                        <h4>Trải Nghiệm Mua Sắm Thuận Tiện</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="opacity-50">Chúng tôi cam kết mang đến trải nghiệm mua sắm online dễ dàng và thuận tiện nhất cho khách hàng. Giao diện trực quan, chức năng tìm kiếm thông minh, và quy trình thanh toán an toàn giúp bạn dễ dàng tìm kiếm và mua sắm các sản phẩm mà bạn yêu thích chỉ trong vài bước đơn giản.</p>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card-header">
+                        <h4>Dịch Vụ Hỗ Trợ Tận Tâm</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="opacity-50">Khách hàng luôn là ưu tiên hàng đầu của chúng tôi. Đội ngũ hỗ trợ khách hàng của chúng tôi luôn sẵn sàng sẻ chia và hỗ trợ bạn trong mọi thắc mắc hay vấn đề liên quan đến sản phẩm, đơn hàng hoặc chính sách của chúng tôi.</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <br>
+          <h1 class="mt-5 text-center">SẢN PHẨM</h1>
+          <div class="row mt-5">
+            {% for p in products %}
+              <div class="col-3 d-flex justify-content-center">
+                <div class="card" style="width: 18rem;">
+                  <div class="percent rounded" style="width: 50px; height: 25px; background: red; position: absolute">
+                    <span class="text-light">-{{ p.get_precentage|floatformat }}%</span>
+                  </div>
+                  <img src="{{ p.anhSP.url }}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <span style="font-size: 12px">{{ p.loaiSP.tenLoai }}</span>
+                    <h5 class="card-title">{{ p.tenSP }}</h5>
+                    <div class="d-flex justify-content-between">
+                      <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.maSP }}" />
+                      <input type="hidden" value="{{ p.maSP }}" class="product-pid-{{ p.maSP }}" />
+                      <input type="hidden" value="{{ p.anhSP.url }}" class="product-image-{{ p.maSP }}" />
+                      <input type="hidden" value="{{ p.maSP }}" class="product-id-{{p.maSP}}" />
+                      <input type="hidden" value="{{ p.tenSP }}" class="product-title-{{p.maSP}}" />
+                      <input type="hidden" value="{{ p.giaBan }}" class="current-product-price-{{p.maSP}}" >
+                      <div class="d-flex flex-column">
+                        <span class="" value="">{{ p.giaBan|intcomma }}VND</span>
+                        <span style="font-size: 12px; opacity: 50%" ><del>{{ p.giaCu|intcomma }}VND</del></span>
+                      </div>
+                      {% comment %} <span>{{ p.giaBan }}VND <span style="font-size: 12px; opacity: 50%" ><del>{{ p.giaCu }}VND</del></span> </span> {% endcomment %}
+                      <a href="{% url "core:product-detail" p.maSP %}" class="btn btn-primary">
+                        <i class="fa-solid fa-plus"></i>
+                      </a>
+                      <button class="btn btn-primary add-to-cart-btn" id="add-to-cart-btn" data-index="{{ p.maSP }}">
+                        <i class="fa-solid fa-cart-shopping text-light "></i>
+                      </button>
+                      <button class="btn border add-to-wishlist" data-product-item="{{ p.maSP }}">
+                        <i class="fa-regular fa-heart"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+            <div class="d-flex justify-content-center">
+              {% if products.has_next %}
+              <a href="?page=1">&laquo First</a>
+              <a href="?page={{products.next_page_number}}" style="margin-left: 10px; margin-right: 10px">next</a>
+              {% endif %}
+      
+              Page {{products.number}} of {{products.paginator.num_pages}}
+      
+              {% if products.has_previous %}
+              <a href="?page={{products.paginator.num_pages}}" style="margin-left: 10px; margin-right: 10px">last</a>
+              <a href="?page={{products.previous_page_number}}">Previous &raquo</a>
+              {% endif %}
+            </div>
+          </div>
+          <!-- OUR TEAM  -->
+          <div class="container mt-5">
+            <h1 class="text-uppercase text-center">Thông tin các thành viên</h1>
+            <p class="text-center opacity-50">Nhóm: 01, môn: Nhập môn Công Nghệ Phần Mềm, sáng thứ 2, tiết 1-3</p>
+            <div class="row mt-3">
+              <div class="col-4 d-flex justify-content-center">
+                <div class="card bg-light" style="width: 18rem; border: none;">
+                  <img style="height: 380px" src="{% static 'assets/images/ThanhVien/Phuc.jpg' %}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h6 class="card-title">Nguyễn Trọng Hoàng Phúc</h6>
+                    <p class="card-text">MSSV: 2001210239, lớp: 12DHTH04</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 d-flex justify-content-center">
+                <div class="card bg-light" style="width: 18rem; border: none;">
+                  <img style="height: 380px" src="{% static 'assets/images/ThanhVien/Khang.jpg' %}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h6 class="card-title">Nguyễn Duy Khang</h6>
+                    <p class="card-text">MSSV: , lớp: </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 d-flex justify-content-center">
+                <div class="card bg-light" style="width: 18rem; border: none;">
+                  <img style="height: 380px" src="{% static 'assets/images/ThanhVien/Nha.jpg' %}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h6 class="card-title">Nguyễn Minh Nhã</h6>
+                    <p class="card-text">MSSV: , lớp: </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 d-flex justify-content-center">
+                <div class="card bg-light" style="width: 18rem; border: none;">
+                  <img style="height: 380px" src="{% static 'assets/images/ThanhVien/Nguyen.jpg' %}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h6 class="card-title">Trần Khôi Nguyên</h6>
+                    <p class="card-text">MSSV: , lớp: </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 d-flex justify-content-center">
+                <div class="card bg-light" style="width: 18rem; border: none;">
+                  <img style="height: 380px" src="{% static 'assets/images/ThanhVien/Nam.jpg' %}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h6 class="card-title">Bùi Phương Nam</h6>
+                    <p class="card-text">MSSV: , lớp: </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 d-flex justify-content-center">
+                <div class="card bg-light" style="width: 18rem; border: none;">
+                  <img style="height: 380px" src="{% static 'assets/images/ThanhVien/Hung.jpg' %}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h6 class="card-title">Lê Tấn Hưng</h6>
+                    <p class="card-text">MSSV: , lớp: </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="bg-light mt-5 p-5" style="">
+      <h1>Liên hệ</h1>
+      <p>Email: ngtrhoangphuc01@gmail.com</p>
+      <p>Địa chỉ: 346, Nguyễn Sơn, phường Phú Thọ Hòa, quận Tân Phú, TP. Hồ Chí Minh</p>
+      <p>Số điện thoại: 0889271576</p>
+      <div class="d-flex ">
+      </div>
+    </div>
+{% endblock content %}

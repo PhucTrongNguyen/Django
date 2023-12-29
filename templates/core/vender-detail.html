@@ -1,0 +1,72 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<main>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="card border-0">
+                <div class="card-body">
+                  <h5 class="card-title">{{ vender.tenNCC }}</h5>
+                  <p class="card-text">{{ vender.moTa }}</p>
+                  <p class="card-text">Địa chỉ: {{ vender.diaChi }}</p>
+                  <p class="card-text">Liên hệ: {{ vender.lienHe }}</p>
+                </div>
+            </div>
+        </div>
+        <span>Chúng tôi tìm được {{number_product.count}} sản phẩm cho bạn</span>
+        <div class="row mt-3">
+            {% for p in product %}
+                <div class="col-3 d-flex justify-content-center">
+                    <div class="card" style="width: 18rem;">
+                        <div class="percent rounded" style="width: 50px; height: 25px; background: red; position: absolute">
+                            <span class="text-light">-{{ p.get_precentage|floatformat }}%</span>
+                        </div>
+                        <img src="{{ p.anhSP.url }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <span style="font-size: 12px">{{ p.loaiSP.tenLoai }}</span>
+                            <h5 class="card-title">{{ p.tenSP }}</h5>
+                            <div class="d-flex justify-content-between">
+                                <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.maSP }}" />
+                                <input type="hidden" value="{{ p.maSP }}" class="product-pid-{{ p.maSP }}" />
+                                <input type="hidden" value="{{ p.anhSP.url }}" class="product-image-{{ p.maSP }}" />
+                                <input type="hidden" value="{{ p.maSP }}" class="product-id-{{p.maSP}}" />
+                                <input type="hidden" value="{{ p.tenSP }}" class="product-title-{{p.maSP}}" />
+                                <input type="hidden" value="{{ p.giaBan }}" class="current-product-price-{{p.maSP}}" >
+                            
+                                <div class="d-flex flex-column">
+                                    <span class="">{{ p.giaBan|intcomma }}VND</span>
+                                    <span style="font-size: 12px; opacity: 50%" ><del>{{ p.giaCu|intcomma }}VND</del></span>
+                                </div>
+                                <a href="{% url "core:product-detail" p.maSP %}" class="btn btn-primary">
+                                    <i class="fa-solid fa-plus"></i>
+                                </a>
+                                <input type="text" value="{{ p.maSP }}" hidden class="product-id" />
+                                <button type="submit" class="btn btn-primary add-to-cart-btn" id="add-to-cart-btn" data-index="{{ p.maSP }}">
+                                    <i class="fa-solid fa-cart-shopping text-light "></i>
+                                </button>
+                                <button class="btn border add-to-wishlist" data-product-item="{{ p.maSP }}">
+                                    <i class="fa-regular fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="d-flex justify-content-center">
+            {% if product.has_next %}
+            <a href="?page=1">&laquo First</a>
+            <a href="?page={{product.next_page_number}}" style="margin-left: 10px; margin-right: 10px">next</a>
+            {% endif %}
+    
+            Page {{product.number}} of {{product.paginator.num_pages}}
+    
+            {% if product.has_previous %}
+            <a href="?page={{product.paginator.num_pages}}" style="margin-left: 10px; margin-right: 10px">last</a>
+            <a href="?page={{product.previous_page_number}}">Previous &raquo</a>
+            {% endif %}
+          </div>
+    </div>
+</main>
+{% endblock content %}

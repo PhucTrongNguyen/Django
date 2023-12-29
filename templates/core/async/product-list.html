@@ -1,0 +1,37 @@
+{% load humanize %}
+{% for p in products %}
+    <div class="col-3 d-flex justify-content-center">
+    <div class="card" style="width: 18rem;">
+        <div class="percent rounded" style="width: 50px; height: 25px; background: red; position: absolute">
+        <span class="text-light">-{{ p.get_precentage|floatformat }}%</span>
+        </div>
+        <img src="{{ p.anhSP.url }}" class="card-img-top" alt="...">
+        <div class="card-body">
+        <span style="font-size: 12px">{{ p.loaiSP.tenLoai }}</span>
+        <h5 class="card-title">{{ p.tenSP }}</h5>
+        <div class="d-flex justify-content-between">
+            <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.maSP }}" />
+            <input type="hidden" value="{{ p.maSP }}" class="product-pid-{{ p.maSP }}" />
+            <input type="hidden" value="{{ p.anhSP.url }}" class="product-image-{{ p.maSP }}" />
+            <input type="hidden" value="{{ p.maSP }}" class="product-id-{{p.maSP}}" />
+            <input type="hidden" value="{{ p.tenSP }}" class="product-title-{{p.maSP}}" />
+            <input type="hidden" value="{{ p.giaBan }}" class="current-product-price-{{p.maSP}}" >
+            <div class="d-flex flex-column">
+                <span class="">{{ p.giaBan|intcomma}}VND</span>
+                <span style="font-size: 12px; opacity: 50%" ><del>{{ p.giaCu|intcomma }}VND</del></span>
+            </div>
+            <a href="{% url "core:product-detail" p.maSP %}" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i>
+            </a>
+            {% comment %} <input type="text" value="{{ p.maSP }}" hidden class="product-id" /> {% endcomment %}
+            <button type="submit" class="btn btn-primary add-to-cart-btn" id="add-to-cart-btn" data-index="{{ p.maSP }}">
+                <i class="fa-solid fa-cart-shopping text-light "></i>
+            </button>
+            <button class="btn border add-to-wishlist" data-product-item="{{ p.maSP }}">
+                <i class="fa-regular fa-heart"></i>
+            </button>
+        </div>
+        </div>
+    </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,76 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% block content %}
+<main id="cart-list">
+    <div class="container-fluid">
+        <h3>Giỏ hàng</h3>
+        <div class="row">
+            <div class="col-8">
+                <div class="d-flex justify-content-between">
+                    <span>Ở đây có {{totalcartitems}} sản phẩm trong giỏ hàng của bạn</span>
+                    <a href="#" style="text-decoration: none;">Xóa giỏ hàng</a>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th><input style="margin-left: 50%; transform: translateX(-50%);" type="checkbox" name="" id=""></th>
+                            <th colspan="5">Sản phẩm</th>
+                            <th>Hình ảnh</th>
+                            <th>Đơn giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                            <th>Xóa</th>
+                            <th>Sửa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product_id, item in cart_data.items %}
+                        <tr>
+                            <td><input style="margin-left: 50%; transform: translateX(-50%);" type="checkbox" name="" id=""></td>
+                            <td colspan="5">{{item.tenSP}}</td>
+                            <td><img src="{{item.anhSP}}" style="width: 50px" /></td>
+                            <td>{{item.giaBan}} <span>VND</span></td>
+                            <td><input style="margin-left: 50%; transform: translateX(-50%); width: 50px" type="number" value="{{item.soLuong}}" class="product-qty-{{product_id}}" min="1" name="" id=""></td>
+                            <td>{% widthratio item.giaBan 1 item.soLuong %} <span>VND</span></td>
+                            <td><buton data-product="{{product_id}}" style="margin-left: 50%; transform: translateX(-50%);" class = "btn btn-default delete-product"><i class="fa-solid fa-trash"></i></button></td>
+                            <td><buton data-product="{{product_id}}" style="margin-left: 50%; transform: translateX(-50%);" class = "btn btn-default update-product"><i class="fa-solid fa-rotate-right"></i></button></td>    
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-success">Tiếp tục mua sắm</button>
+                    <button class="btn btn-success">Cập nhật giỏ hàng</button>
+                </div>
+                
+            </div>
+            <div class="col-4">
+                <div class="border p-3">
+                    <table class="table">
+                        <tr>
+                            <td>Thành tiền</td>
+                            <td>{{ cart_total_amount|floatformat:0 }} VND</td>
+                        </tr>
+                        <tr>
+                            <td>Phí giao hàng</td>
+                            <td>Miễn phí</td>
+                        </tr>
+                        <tr>
+                            <td>Quốc tịch</td>
+                            <td>Việt Nam</td>
+                        </tr>
+                        <tr>
+                            <td>Tổng cộng</td>
+                            <td>{{ cart_total_amount|floatformat:0 }} VND</td>
+                        </tr>
+                    </table>
+                    {% if totalcartitems %}
+                    <a class="btn btn-success" href="{% url "core:checkout" %}">Thanh toán</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
