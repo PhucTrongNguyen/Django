@@ -378,6 +378,7 @@ def order_detail(request, id):
     }
     return render(request, 'core/order-detail.html', context)
 
+@login_required
 def wishlist_view(request):
     wishlist = DanhSachYeuThich.objects.all()
     context = {
