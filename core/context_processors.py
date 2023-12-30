@@ -4,9 +4,9 @@ from django.contrib import messages
 
 def default(request):
     loaiSP = LoaiSP.objects.all()
-    if request.user.is_authenticated:
+    try:
         diaChi = DiaChi.objects.get(user=request.user.id, trangThai = True)
-    else:
+    except:
         diaChi = None
 
     min_max_gia = SanPham.objects.aggregate(Min("giaBan"), Max("giaBan"))
