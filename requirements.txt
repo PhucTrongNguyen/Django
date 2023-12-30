@@ -19,6 +19,7 @@ EasyProcess==1.1
 entrypoint2==1.1
 executing==2.0.1
 fonttools==4.45.1
+gunicorn==21.2.0
 idna==3.6
 ipykernel==6.27.1
 ipython==8.18.1
