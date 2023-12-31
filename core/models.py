@@ -33,7 +33,7 @@ RATING = {
 
 
 def user_directory_path(instance, filename):
-    return 'user_{0}/{1}'.format(instance.user.id, filename)
+    return 'user_{0}/{1}'.format(1, filename)
 
 # Create your models here.
 class LoaiSP(models.Model):
