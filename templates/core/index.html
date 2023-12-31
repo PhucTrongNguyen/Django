@@ -84,14 +84,13 @@
                         <span class="" value="">{{ p.giaBan|intcomma }}VND</span>
                         <span style="font-size: 12px; opacity: 50%" ><del>{{ p.giaCu|intcomma }}VND</del></span>
                       </div>
-                      {% comment %} <span>{{ p.giaBan }}VND <span style="font-size: 12px; opacity: 50%" ><del>{{ p.giaCu }}VND</del></span> </span> {% endcomment %}
                       <a href="{% url "core:product-detail" p.maSP %}" class="btn btn-primary">
                         <i class="fa-solid fa-plus"></i>
                       </a>
                       <button class="btn btn-primary add-to-cart-btn" id="add-to-cart-btn" data-index="{{ p.maSP }}">
                         <i class="fa-solid fa-cart-shopping text-light "></i>
                       </button>
-                      <button class="btn border add-to-wishlist" data-product-item="{{ p.maSP }}">
+                      <button class="btn border add-to-wishlist" data-product-item="{{ p.maSP }}" action="{% url "core:add-to-wishlist"%}">
                         <i class="fa-regular fa-heart"></i>
                       </button>
                     </div>
