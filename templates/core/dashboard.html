@@ -1,5 +1,6 @@
 {% extends "partials/base.html" %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <main class="container mt-5">
     <div class="w-100 d-flex">
@@ -19,10 +20,6 @@
                         <p>
                             Từ trang điều khiển, bạn sẽ dễ dàng kiểm tra quá trình đặt hàng, quản lý địa chỉ đặt hàng và giao hàng.
                         </p>
-                        {% comment %} <div class="mt-4">
-                            <p>{{month}}</p>
-                            <p>{{total_orders}}</p>
-                        </div> {% endcomment %}
                     </div>
                 </div>
             </div>
@@ -42,14 +39,23 @@
                         <tr>
                             <td>#{{o.id}}</td>
                             <td>{{o.ngayDH}}</td>
-                            <td>{{o.trangThaiDH|title}}</td>
+                            <td>
+                                {% if o.trangThaiDH == "processing" %}
+                                    Đang xử lý
+                                {% else %}
+                                    Đã xử lý
+                                {% endif %}
+                            </td>
                             {% if o.trangThaiThanhToan == True %}
                                 <td><i class="fa-solid fa-check text-success d-flex justify-content-center"></i></td>
                             {% else %}
                                 <td><i class="fa-solid fa-xmark text-danger d-flex justify-content-center"></i></td>
                             {% endif %}
-                            <td>{{o.giaBan}} <span>VND</span></td>
-                            <td><a href="{% url 'core:order-detail' o.id %}" class="btn-link">View</a></td>
+                            <td>{{o.giaBan|intcomma}} <span>VND</span></td>
+                            <td>
+                                <a href="{% url 'core:order-detail' o.id %}" class="btn-link">Xem</a>
+                                <a href="#" class="btn-link remove-order" order-id="{{o.id}}">Xoá</a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -61,7 +67,7 @@
                 </div>
             </div>
             <div id="DiaChi" class="tabcontent">
-                <form class="mb-4 card" method="POST">
+                <form class="mb-4 card p-3" method="POST">
                     {% csrf_token %}
                     <div class="card-header">
                         <h5>Them dia chi</h5>
@@ -77,28 +83,29 @@
                 </form>
                 <div class="row">
                     {% for a in address %}
-                    <div class="card col-6">
-                        <div class="card-header">
-                            <h3>Dia chi giao hang {{forloop.counter}}</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="">
-                                <p>{{a.diaChi}}</p>
+                        {% if a.diaChi != "" %}
+                        <div class="card col-6">
+                            <div class="card-header">
+                                <h3>Địa chỉ giao hàng {{forloop.counter}}</h3>
                             </div>
-                        </div>
-                        {% if a.trangThai %}
-                        <div class="d-flex">
-                            <button style="display: none" data-address="{{a.id}}" class="btn btn-success make-default-address">Lam mac dinh</button>
-                            
-                        </div>
-                        {% else %}
-                        <div class="d-flex">
-                            <button data-address="{{a.id}}" class="btn btn-success make-default-address">Lam mac dinh</button>
-                            
+                            <div class="card-body">
+                                <div class="">
+                                    <p>{{a.diaChi}}</p>
+                                </div>
+                            </div>
+                            {% if a.trangThai %}
+                            <div class="d-flex">
+                                <button style="display: none" data-address-id="{{a.id}}" class="btn btn-success make-default-address button{{a.id}} action_btn">Mặc định</button>
+                                <i data-address-id="{{a.id}}" class="fa-solid fa-circle-check text-success check{{a.id}} check"></i>
+                            </div>
+                            {% else %}
+                            <div class="d-flex">
+                                <button data-address-id="{{a.id}}" class="btn btn-success make-default-address button{{a.id}} action_btn">Mặc định</button>
+                                <i data-address-id="{{a.id}}" style="display: none" class="fa-solid fa-circle-check text-success check{{a.id}} check"></i>
+                            </div>
+                            {% endif %}
                         </div>
                         {% endif %}
-                        
-                    </div>
                     {% endfor %}
                 </div>
             </div>
