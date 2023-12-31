@@ -1,5 +1,6 @@
 {% extends "partials/base.html" %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <main class="container">
     <h3>Thanh toán</h3>
@@ -28,7 +29,7 @@
             <div class="card p-3">
                 <div class="d-flex justify-content-between">
                     <h4 class="card-title">Hóa đơn</h4>
-                    <span>Tổng cộng: {{cart_total_amount|floatformat:0}} VND</span>
+                    <span>Tổng cộng: {{ cart_total_amount|floatformat:0|intcomma }} VND</span>
                 </div>
                 <hr>
                 <a class="btn btn-success w-25" href="{% url "core:cart" %}" >Quay lại giỏ hàng</a>
@@ -39,34 +40,21 @@
                             <td style="width: 180px">{{item.tenSP}}</td>
                             <td><img src="{{item.anhSP}}" style="width: 50px" /></td>
                             <td>x{{item.soLuong}}</td>
-                            <td style="opacity: 50%">{{item.giaBan}} <span>VND</span></td>
+                            <td style="opacity: 50%">{{item.giaBan|intcomma}} <span>VND</span></td>
                             <td>{% widthratio item.giaBan 1 item.soLuong %} <span>VND</span></td>
-                            {% comment %} <td><buton data-product="{{product_id}}" style="margin-left: 50%; transform: translateX(-50%);" class = "btn btn-default delete-product"><i class="fa-solid fa-trash"></i></button></td>
-                            <td><buton data-product="{{product_id}}" style="margin-left: 50%; transform: translateX(-50%);" class = "btn btn-default update-product"><i class="fa-solid fa-rotate-right"></i></button></td>    
-                          {% endcomment %}
                         </tr>
                     {% endfor %}
                 </table>
-                {% comment %} <div class="card-body">
-                    <table class="table">
-                        <tr>
-                            <td>Hình ảnh</td>
-                            <td>Tên sản phẩm</td>
-                            <td>Số lượng</td>
-                            <td>Gía bán</td>
-                        </tr>
-                    </table>
-                </div> {% endcomment %}
             </div>
             <div class="">
                 <h4><strong>Thanh toán</strong></h4>
-                <div>
+                <div class="mt-2">
                     <input type="radio" id="exampleRadio1" name="payment_option" value="">
                     <label for="exampleRadio1">Ví điện tử</label><br>
                     <input type="radio" id="css" name="fav_language" value="HTML">
                     <label for="css">Thanh toán trực tiếp</label><br>
                 </div>
-                <div>
+                <div class="mt-2">
                     {{paypal_payment_button.render}}
                 </div>
                 <button class="btn btn-success mt-3">Tạo hóa đơn</button>
