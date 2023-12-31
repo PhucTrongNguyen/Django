@@ -1,5 +1,6 @@
 {% extends "partials/base.html" %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 <main class="container mt-5" id="wishlist-list">
     <div class="">
@@ -15,15 +16,30 @@
             </tr>
             {% for p in wishlist %}
             <tr>
+                <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.sanPham.maSP }}" />
+                <input type="hidden" value="{{ p.sanPham.maSP }}" class="product-pid-{{ p.sanPham.maSP }}" />
+                <input type="hidden" value="{{ p.sanPham.anhSP.url }}" class="product-image-{{ p.sanPham.maSP }}" />
+                <input type="hidden" value="{{ p.sanPham.maSP }}" class="product-id-{{p.sanPham.maSP}}" />
+                <input type="hidden" value="{{ p.sanPham.tenSP }}" class="product-title-{{p.sanPham.maSP}}" />
+                <input type="hidden" value="{{ p.sanPham.giaBan }}" class="current-product-price-{{p.sanPham.maSP}}" >
                 <td style="width: 250px"><img src="{{p.sanPham.anhSP.url}}" alt="" class="w-25"></td>
                 <td>{{p.sanPham.tenSP}}</td>
-                <td>{{p.sanPham.giaBan}}</td>
-                <td>{{p.sanPham.trangThaiSP}}</td>
+                <td>{{p.sanPham.giaBan|intcomma}}</td>
                 <td>
-                    <button class="btn btn-success">Thêm vào giỏ hàng</button>
+                    {% if p.sanPham.sanCo == True %}
+                        Còn hàng
+                    {% else %}
+                        Hết hàng
+                    {% endif %}
+                    {% comment %} {{p.sanPham.trangThaiSP}} {% endcomment %}
                 </td>
                 <td>
-                    <button class="btn btn-success delete-wishlist-product" data-wishlist-product= {{ p.id }}><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-success add-to-cart-btn" id="add-to-cart-btn" data-index="{{ p.sanPham.maSP }}">
+                        <i class="fa-solid fa-cart-shopping text-light "></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-success delete-wishlist-product" data-wishlist-product= {{ p.id }} action="{% url "core:remove-from-wishlist"%}"><i class="fa-solid fa-trash"></i></button>
                 </td>
             </tr>
             {% endfor %}
