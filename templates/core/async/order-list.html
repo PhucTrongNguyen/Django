@@ -1,0 +1,37 @@
+<div class="card-text">
+    <h2>Hóa đơn của bạn</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>Hóa đơn</th>
+            <th>Ngày đặt</th>
+            <th>Trạng thái đặt hàng</th>
+            <th>Trạng thái thanh toán</th>
+            <th>Tổng cộng</th>
+            <th>Hành động</th>
+        </tr>
+        {% for o in orders %}
+        <tr>
+            <td>#{{o.id}}</td>
+            <td>{{o.ngayDH}}</td>
+            <td>
+                {% if o.trangThaiDH == "processing" %}
+                    Đang xử lý
+                {% else %}
+                    Đã xử lý
+                {% endif %}
+                {% comment %} {{o.trangThaiDH|title}} {% endcomment %}
+            </td>
+            {% if o.trangThaiThanhToan == True %}
+                <td><i class="fa-solid fa-check text-success d-flex justify-content-center"></i></td>
+            {% else %}
+                <td><i class="fa-solid fa-xmark text-danger d-flex justify-content-center"></i></td>
+            {% endif %}
+            <td>{{o.giaBan}} <span>VND</span></td>
+            <td>
+                <a href="{% url 'core:order-detail' o.id %}" class="btn-link">Xem</a>
+                <a href="#" class="btn-link remove-order" order-id="{{o.id}}">Xoá</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
