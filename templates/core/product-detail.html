@@ -17,7 +17,8 @@
                             <div class="card-body">
                                 <h1 class="card-title">{{product.tenSP}}</h1>
                                 <div class="d-flex">
-                                    <h3 class="card-text d-flex align-items-center current-product-price-{{product.maSP}}" id="current-product-price">{{ product.giaBan|intcomma }}</h3><span>VND</span>
+                                    <input type="hidden" value="{{ product.giaBan }}" class="current-product-price-{{product.maSP}}" >
+                                    <h3 class="card-text d-flex align-items-center" id="current-product-price">{{ product.giaBan|intcomma }}</h3><span>VND</span>
                                     <div class="d-inline-grid" style="font-size: 12px; margin-left: 10px">
                                         <span>{{ product.get_precentage|floatformat }}%</span>
                                         <span id="old-price"><del>{{ product.giaCu|intcomma }}VND</del></span>
@@ -38,7 +39,9 @@
                                         <button type="submit" class="btn btn-primary add-to-cart-btn" id="add-to-cart-btn" data-index="{{ product.maSP }}">
                                             <i class="fa-solid fa-cart-shopping text-light "></i>
                                         </button>
-                                        <button class="btn border add-to-wishlist" data-product-item="{{ product.maSP }}"><i class="fa-regular fa-heart"></i></button>
+                                        <button class="btn border add-to-wishlist" data-product-item="{{ product.maSP }}" action="{% url "core:add-to-wishlist"%}">
+                                            <i class="fa-regular fa-heart"></i>
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -54,7 +57,6 @@
                 <div class="card p-4">
                     <div class="tab d-flex justify-content-around">
                         <button class="tablinks" onclick="openCity(event, 'MoTa')">Mô tả</button>
-                        <button class="tablinks" onclick="openCity(event, 'ThemTT')">Thêm thông tin</button>
                         <button class="tablinks" onclick="openCity(event, 'NhaCC')">Nhà cung cấp</button>
                         <button class="tablinks" onclick="openCity(event, 'DanhGia')">Đánh giá<span class="badge text-black">{{ reviews.count }}</span></button>
                     </div>
@@ -62,19 +64,13 @@
                     <!-- Tab content -->
                     <div id="MoTa" class="tabcontent">
                         <div class="card-text">
-                            <p>{{ product.moTa }}</p>
-                        </div>
-                    </div>
-                    
-                    <div id="ThemTT" class="tabcontent">
-                        <div class="card-text">
-                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Mollitia blanditiis quo impedit dolorum veritatis qui nesciunt sunt facilis consequuntur, vitae ullam inventore aut explicabo officiis nostrum rerum velit porro, quia praesentium harum repellat. Commodi tempora necessitatibus aliquam ullam adipisci ipsum quasi sequi enim veniam inventore labore alias beatae, eveniet quo nulla iusto quisquam aspernatur dolores possimus iste, facere suscipit consequuntur nemo. Ex nemo accusamus alias itaque omnis sunt ipsum! Eaque optio ad voluptatum asperiores, animi ex quaerat velit, quisquam dolorem odio delectus error? Blanditiis molestiae temporibus, labore officiis dolorem quae obcaecati quasi sapiente ea ullam autem fuga quia facilis tempore!</p>
+                            <p>{{ product.moTa|safe }}</p>
                         </div>
                     </div>
                     
                     <div id="NhaCC" class="tabcontent">
                         <div class="card-text">
-                            <p>{{product.nhaCungCap.moTa}}</p>
+                            <p>{{ product.nhaCungCap.moTa|safe }}</p>
                         </div>
                     </div>
 
@@ -144,7 +140,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <div class="form-group">
+                                                <div class="form-group p-3">
                                                     {{review_form.xepHang}}
                                                 </div>
                                             </div>
@@ -175,11 +171,12 @@
                                     <input type="hidden" value="{{ p.anhSP.url }}" class="product-image-{{ p.maSP }}" />
                                     <input type="hidden" value="{{ p.maSP }}" class="product-id-{{p.maSP}}" />
                                     <input type="hidden" value="{{ p.tenSP }}" class="product-title-{{p.maSP}}" />
+                                    <input type="hidden" value="{{ p.giaBan }}" class="current-product-price-{{p.maSP}}" >
                                     <span style="font-size: 12px">{{ p.loaiSP.tenLoai }}</span>
                                     <h5 class="card-title">{{ p.tenSP }}</h5>
                                     <div class="">
                                         <div class="d-flex">
-                                            <span class="current-product-price-{{p.maSP}}">{{ p.giaBan|intcomma }}</span><span>VND</span>
+                                            <span class="">{{ p.giaBan|intcomma }}</span><span>VND</span>
                                             <span style="font-size: 12px; opacity: 50%" ><del>{{ p.giaCu|intcomma }}VND</del></span>
                                         </div>
                                         <div class="d-flex justify-content-end">
@@ -188,6 +185,9 @@
                                             </a>
                                             <button type="submit" class="btn btn-primary add-to-cart-btn" id="add-to-cart-btn" data-index="{{ p.maSP }}">
                                                 <i class="fa-solid fa-cart-shopping text-light "></i>
+                                            </button>
+                                            <button class="btn border add-to-wishlist" data-product-item="{{ p.maSP }}" action="{% url "core:add-to-wishlist"%}">
+                                                <i class="fa-regular fa-heart"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -226,7 +226,7 @@
                             <span class="text-warning">Địa chỉ không hợp lệ</span>
                             {% endif %}
                             
-                            <a href="#" style="text-decoration: none;">Thay đổi</a>
+                            <a href="{% url "core:dashboard" %}" style="text-decoration: none;">Thay đổi</a>
                         </div>
                         
                         <hr>
