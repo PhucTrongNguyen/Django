@@ -380,12 +380,17 @@ def order_detail(request, id):
 
 @login_required
 def wishlist_view(request):
-    wishlist = DanhSachYeuThich.objects.all()
-    context = {
-        'wishlist': wishlist,
-    }
-
-    return render(request, "core/wishlist.html", context)
+    wishlist = DanhSachYeuThich.objects.filter(user = request.user)
+    wishlist_count = DanhSachYeuThich.objects.filter(user = request.user.id).count()
+    
+    if wishlist_count > 0: 
+        context = {
+            'wishlist': wishlist,
+        }
+        return render(request, "core/wishlist.html", context)
+    else:
+        messages.warning(request, "Bạn chưa có sản phẩm nào trong danh sách yêu thích")
+        return render(request, "core/index.html")
 
 def add_to_wishlist(request):
     id = request.GET["maSP"]
