@@ -427,3 +427,24 @@ def remove_wishlist(request):
     wishlist_json = serializers.serialize('json', wishlist)
     data = render_to_string("core/async/wishlist-list.html", context)
     return JsonResponse({"data": data, "wishlist":wishlist_json})
+
+def remove_orders(request):
+    oid = request.GET["oid"]
+    orders = DanhSachDatHang.objects.filter(user = request.user.id).order_by("-id")
+    orders_d = DanhSachDatHang.objects.get(id = oid)
+    delete_order = orders_d.delete()
+
+    context = {
+        "bool": True,
+        "orders": orders,
+    }
+
+    orders_json = serializers.serialize('json', orders)
+    data = render_to_string("core/async/order-list.html", context)
+    return JsonResponse({"data": data, "orders": orders_json})
+
+def make_address_default(request):
+    id = request.GET["id"]
+    DiaChi.objects.update(trangThai= False)
+    DiaChi.objects.filter(id= id).update(trangThai = True)
+    return JsonResponse({"boolean": True})
