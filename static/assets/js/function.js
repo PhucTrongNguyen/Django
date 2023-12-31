@@ -221,7 +221,7 @@ $(document).ready(function(){
         console.log("Id: "+ product_id);
 
         $.ajax({
-            url: $(this).attr("action"),
+            url: $(this).attr("action"), //add-to-wishlist/
             data: {
                 "maSP": product_id,
             },
