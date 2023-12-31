@@ -221,7 +221,7 @@ $(document).ready(function(){
         console.log("Id: "+ product_id);
 
         $.ajax({
-            url: "add-to-wishlist/",
+            url: $(this).attr("action"),
             data: {
                 "maSP": product_id,
             },
@@ -259,9 +259,50 @@ $(document).ready(function(){
         })
     })
 
-    $(document).on("click", ".make-default-address", function(){
-        let address = $(this).attr("data-address");
+    //Xoa don hang trong danh sach dat hang
+    $(document).on("click", ".remove-order", function(){
+        let order_id = $(this).attr("order-id")
+        let this_val = $(this)
 
-        console.log(address);
+        console.log("Order id: ", order_id)
+
+        $.ajax({
+            url: "/remove-orders",
+            data: {
+                "oid": order_id
+            },
+            dataType: "json",
+            beforeSend: function(){
+                console.log("Đang xóa đơn hàng");
+            },
+            success: function(response){
+                $("#HoaDon").html(response.data)
+            }
+        })
+    })
+
+    $(document).on("click", ".make-default-address", function(){
+        let address_id = $(this).attr("data-address-id");
+        let this_val = $(this)
+
+        console.log(address_id);
+
+        $.ajax({
+            url: "/make-default-address",
+            data: {
+                "id": address_id,
+            },
+            dataType: "json",
+            success: function(response){
+                console.log("Da them dia chi thanh cong");
+                if(response.boolean == true){
+                    $(".check").hide();
+                    $(".action_btn").show();
+
+                    $(".check" + address_id).show();
+                    $(".button" + address_id).hide();
+                }
+            }
+        })
     })
 })
