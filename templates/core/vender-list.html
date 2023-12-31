@@ -6,12 +6,6 @@
     <div class="container-fluid">
         <h1 class="text-center">Danh sách nhà cung cấp</h1>
         <div class="container mt-5">
-            {% comment %} <div class="w-50 container">
-                <form class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <span class="input-group-text" id="basic-addon2">@example.com</span>
-                </form>
-            </div> {% endcomment %}
             <span>Chúng tôi có {{number_vender.count}} nhà cung cấp cho bạn</span>
         </div>
         <div class="row mt-5">
@@ -23,7 +17,7 @@
                 <div class="card w-75 border-0">
                     <div class="card-body">
                       <h5 class="card-title"><a href="{% url "core:vender-detail" v.maNCC %}">{{ v.tenNCC }}</a></h5>
-                      <p class="card-text">{{ v.moTa }}</p>
+                      <p class="card-text">{{ v.moTa|safe }}</p>
                       <p class="card-text">Địa chỉ: {{ v.diaChi }}</p>
                       <p class="card-text">Liên hệ: {{ v.lienHe }}</p>
                       <div class="d-flex justify-content-end">
