@@ -14,7 +14,6 @@ def default(request):
     try:
         wishlist = DanhSachYeuThich.objects.filter(user = request.user)
     except:
-        messages.warning(request, "Bạn cần phải đăng nhập trước khi thêm sản phẩm vào danh sách yêu thích")
         wishlist = 0
 
     nhaCungCap = NhaCungCap.objects.all()
